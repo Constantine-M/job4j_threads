@@ -1,4 +1,4 @@
-
+[![CI with Maven](https://github.com/Constantine-M/job4j_threads/actions/workflows/gitActions.yml/badge.svg)](https://github.com/Constantine-M/job4j_threads/actions/workflows/gitActions.yml)
 
 
 About project.

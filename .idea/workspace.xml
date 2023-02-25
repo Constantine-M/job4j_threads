@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="08aa2f0e-7e0b-4eb2-9d0e-27eb510a4256" name="Changes" comment="Start job4j_threads #1">
+    <list default="true" id="08aa2f0e-7e0b-4eb2-9d0e-27eb510a4256" name="Changes" comment="Start job4j_threads #2">
       <change afterPath="$PROJECT_DIR$/src/main/java/ru/job4j/basic/ConcurrentOutput.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/github/workflows/gitActions.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,7 +91,7 @@
       <workItem from="1676993283890" duration="2266000" />
       <workItem from="1676995599408" duration="1778000" />
       <workItem from="1676997927290" duration="1355000" />
-      <workItem from="1677326863026" duration="4340000" />
+      <workItem from="1677326863026" duration="5179000" />
     </task>
     <task id="LOCAL-00001" summary="Start job4j_threads #0">
       <created>1676997070325</created>
@@ -108,7 +107,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677330558811</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Start job4j_threads #2">
+      <created>1677331303502</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1677331303502</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -128,6 +134,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Start job4j_threads #0" />
     <MESSAGE value="Start job4j_threads #1" />
-    <option name="LAST_COMMIT_MESSAGE" value="Start job4j_threads #1" />
+    <MESSAGE value="Start job4j_threads #2" />
+    <option name="LAST_COMMIT_MESSAGE" value="Start job4j_threads #2" />
   </component>
 </project>
