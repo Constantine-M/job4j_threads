@@ -25,10 +25,9 @@ package ru.job4j.basic;
  * будут выполняться в многозадачной среде.
  * Реализуем это через анонимный класс,
  * который для тебя second.
- * В нашем классе 2 варианта - с лямбдой
- * и без нее. Разница в занимаемом
- * простратве большая и читаемость
- * с лямбдой лучше.
+ * При создании нити лучше использовать
+ * лямбда выражения - код намного короче
+ * и читать его легче.
  */
 public class ConcurrentOutput {
     public static void main(String[] args) {
@@ -38,12 +37,9 @@ public class ConcurrentOutput {
         another.start();
         System.out.println(Thread.currentThread().getName());
 
-        Thread second = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println(Thread.currentThread().getName());
-            }
-        });
+        Thread second = new Thread(
+                () -> System.out.println(Thread.currentThread().getName())
+        );
         second.start();
     }
 }
