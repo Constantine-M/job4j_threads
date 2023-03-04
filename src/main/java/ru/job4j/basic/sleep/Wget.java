@@ -1,4 +1,4 @@
-package ru.job4j.basic;
+package ru.job4j.basic.sleep;
 
 /**
  * Данный класс демонстирирует возможности
