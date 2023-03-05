@@ -149,10 +149,10 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <finalName>InstrumentationAgent</finalName>
+                            <finalName>SimpleWget</finalName>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>ru/job4j/basic/ConcurrentOutput</mainClass>
+                                    <mainClass>ru.job4j.basic.wget.SimpleWget</mainClass>
                                 </transformer>
                             </transformers>
                             <filters>
