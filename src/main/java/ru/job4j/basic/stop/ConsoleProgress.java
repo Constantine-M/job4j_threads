@@ -1,12 +1,29 @@
 package ru.job4j.basic.stop;
 
 /**
+ * 6. Прерывание блокированной нити.
+ *
  * Данный класс реализует и
  * демонстрирует анимацию загрузки.
  * {@link Thread#sleep} внутри цикла
  * замедляет процесс отображения
  * символов, что позволяет их
  * видеть во время работы программы.
+ *
+ * {@link Thread#interrupt()}, вызванный,
+ * например, в методах {@link Thread#sleep},
+ * {@link Thread#join()}, {@link Thread#wait()},
+ * не выставляет флаг прерывания,
+ * если нить находится в режиме
+ * ожидания, сна или заблокирована
+ * на длительное время другим
+ * схожим вызовом.
+ *
+ * Поэтому чтобы прервать нить,
+ * в блоке catch нужно дополнительно
+ * вызывать прерывание нити,
+ * для того чтобы прерывания
+ * действительно произошло.
  */
 public class ConsoleProgress implements Runnable {
 
@@ -22,7 +39,7 @@ public class ConsoleProgress implements Runnable {
                     i = 0;
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
     }
