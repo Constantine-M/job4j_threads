@@ -44,23 +44,17 @@ public class SimpleWget implements Runnable {
             byte[] dataBuffer = new byte[1024];
             int bytesRead;
             int downloadData = 0;
-            int totalData = 0;
-            long startTotalTime = System.currentTimeMillis();
             long startCycleTime = System.currentTimeMillis();
             while (((bytesRead = in.read(dataBuffer, 0, 1024)) != -1)) {
                 fileOutputStream.write(dataBuffer, 0, bytesRead);
                 downloadData += bytesRead;
-                totalData += bytesRead;
                 try {
                     if (downloadData >= speed) {
                         long cycleTime = System.currentTimeMillis() - startCycleTime;
-                        long totalTime = System.currentTimeMillis() - startTotalTime;
-                        System.out.print("\rTime in milliseconds: ".concat(String.valueOf(totalTime)));
-                        System.out.print("\rTotal data in bytes: ".concat(String.valueOf(totalData)));
-                        System.out.println(cycleTime);
                         if (cycleTime < 1000) {
                             Thread.sleep(1000 - cycleTime);
                         }
+                        startCycleTime = System.currentTimeMillis();
                         downloadData = 0;
                     }
                 } catch (InterruptedException e) {
@@ -126,7 +120,10 @@ public class SimpleWget implements Runnable {
         String url = args[0];
         int speed = Integer.parseInt(args[1]);
         Thread wget = new Thread(new SimpleWget(url, speed));
+        long start = System.currentTimeMillis();
         wget.start();
         wget.join();
+        System.out.println("Total time is: "
+                .concat(String.valueOf(System.currentTimeMillis() - start)));
     }
 }
