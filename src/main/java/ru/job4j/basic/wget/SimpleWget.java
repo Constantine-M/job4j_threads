@@ -48,20 +48,16 @@ public class SimpleWget implements Runnable {
             while (((bytesRead = in.read(dataBuffer, 0, 1024)) != -1)) {
                 fileOutputStream.write(dataBuffer, 0, bytesRead);
                 downloadData += bytesRead;
-                try {
-                    if (downloadData >= speed) {
-                        long cycleTime = System.currentTimeMillis() - startCycleTime;
-                        if (cycleTime < 1000) {
-                            Thread.sleep(1000 - cycleTime);
-                        }
-                        startCycleTime = System.currentTimeMillis();
-                        downloadData = 0;
+                if (downloadData >= speed) {
+                    long cycleTime = System.currentTimeMillis() - startCycleTime;
+                    if (cycleTime < 1000) {
+                        Thread.sleep(1000 - cycleTime);
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    startCycleTime = System.currentTimeMillis();
+                    downloadData = 0;
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
