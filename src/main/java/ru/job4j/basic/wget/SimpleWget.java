@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
  */
 public class SimpleWget implements Runnable {
 
+    private static final int MBYTE_IN_BYTES = 1048576;
+
     /**
      * Данное поле описывает ссылку.
      * По ссылке мы будем скачивать
@@ -27,10 +29,12 @@ public class SimpleWget implements Runnable {
 
     /**
      * Данное поле описывает скорость
-     * загрузки файла в Byte/sec.
+     * загрузки файла в Мбайт/с.
+     * Ее потребуется указывать
+     * во время запуска программы.
+     * Не путать с Мбит/с !!!
      */
     private final int speed;
-
     public SimpleWget(String url, int speed) {
         this.url = url;
         this.speed = speed;
@@ -48,7 +52,7 @@ public class SimpleWget implements Runnable {
             while (((bytesRead = in.read(dataBuffer, 0, 1024)) != -1)) {
                 fileOutputStream.write(dataBuffer, 0, bytesRead);
                 downloadData += bytesRead;
-                if (downloadData >= speed) {
+                if (downloadData >= speed * MBYTE_IN_BYTES) {
                     long cycleTime = System.currentTimeMillis() - startCycleTime;
                     if (cycleTime < 1000) {
                         Thread.sleep(1000 - cycleTime);
