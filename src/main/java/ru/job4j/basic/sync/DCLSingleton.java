@@ -18,9 +18,6 @@ package ru.job4j.basic.sync;
  * решить эту проблему - это DCL
  * (double-checked locking).
  *
- * Вот отличная статья
- * <a href>https://habr.com/ru/post/27108/</a>
- *
  * Без ключевого слова "volatile"
  * может произойти так, что главная
  * нить запишет новое значение
