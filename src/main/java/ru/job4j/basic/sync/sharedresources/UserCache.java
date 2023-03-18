@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * Данный класс описывает кеш,
@@ -24,6 +25,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Методы {@link UserCache#add} и
  * {@link UserCache#findById} работают
  * с копиями объекта {@link User}.
+ *
+ * Итог: методы должны работать с
+ * копиями и возвращать копии объектов.
  */
 @ThreadSafe
 public class UserCache {
@@ -40,7 +44,15 @@ public class UserCache {
         return User.of(users.get(id).getName());
     }
 
+    /**
+     * В данном методе, как и в
+     * остальных, мы будем получать
+     * список копий объектов {@link User}.
+     * @return список копий {@link User}.
+     */
     public List<User> findAll() {
-        return new ArrayList<>(users.values());
+        return users.values().stream()
+                .map(u -> User.of(u.getName()))
+                .collect(Collectors.toList());
     }
 }
