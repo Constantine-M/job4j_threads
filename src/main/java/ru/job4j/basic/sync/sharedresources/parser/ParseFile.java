@@ -25,6 +25,22 @@ public class ParseFile {
         this.file = file;
     }
 
+    public String getContentWithoutUnicode() {
+        return getContentWithFilter(data -> data < 0x80);
+    }
+
+    /**
+     * В данном методе я использовал
+     * заглушку для {@link Predicate},
+     * чтобы метод {@link Predicate#test}
+     * всегда возвращал true. При этом
+     * здесь нет ограничений (фильтра).
+     * @return строку с текстом.
+     */
+    public String getContent() {
+        return getContentWithFilter(data -> true);
+    }
+
     /**
      * Данный метод парсит файл и
      * записывает текст в строку.
@@ -34,21 +50,24 @@ public class ParseFile {
      * строку. Например, можно
      * с помощью фильтра исключить
      * текст в формате Unicode.
+     * Поэтому, на основе этого метода,
+     * мы будем писать новые с другим
+     * функционалом, более конкретным.
      * @param filter фильтр.
      * @return отфильтрованный текст.
      */
-    public String getContent(Predicate<Character> filter) {
-        String output = "";
+    private String getContentWithFilter(Predicate<Character> filter) {
+        StringBuilder output = new StringBuilder();
         int data;
         try (InputStream i = new FileInputStream(file)) {
-            while ((data = i.read()) > 0) {
+            while ((data = i.read()) != -1) {
                 if (filter.test((char) data)) {
-                    output += (char) data;
+                    output.append((char) data);
                 }
             }
         } catch (IOException e) {
             LOG.error("Exception write to log. ", e);
         }
-        return output;
+        return output.toString();
     }
 }
