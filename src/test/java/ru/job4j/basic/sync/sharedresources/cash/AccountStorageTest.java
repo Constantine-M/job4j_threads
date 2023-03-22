@@ -1,11 +1,9 @@
 package ru.job4j.basic.sync.sharedresources.cash;
 
 import org.junit.Test;
-import org.junit.jupiter.api.Disabled;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Disabled
 public class AccountStorageTest {
 
     @Test
@@ -47,5 +45,20 @@ public class AccountStorageTest {
                 .orElseThrow(() -> new IllegalStateException("Not found account by id = 1"));
         assertThat(firstAccount.amount()).isEqualTo(0);
         assertThat(secondAccount.amount()).isEqualTo(200);
+    }
+
+    @Test
+    public void whenDonorCanNotTransferThenFalse() {
+        var storage = new AccountStorage();
+        storage.add(new Account(1, 99));
+        storage.add(new Account(2, 100));
+        assertThat(storage.transfer(1, 2, 100)).isFalse();
+    }
+
+    @Test
+    public void whenReceiverDontExistThenFalse() {
+        var storage = new AccountStorage();
+        storage.add(new Account(1, 1000));
+        assertThat(storage.transfer(1, 2, 100)).isFalse();
     }
 }
