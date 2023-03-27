@@ -19,13 +19,18 @@ public class AccountStorage {
      * Если с указанным id не связана
      * ни одна запись, то добавляем
      * эту запись.
-     * Если возвращаемый счет != null,
-     * то добавление произошло.
+     * Если возвращаемый счет == null,
+     * то добавление произошло. Сравниваем
+     * с null, потому что при отсутствии
+     * препятствий метод
+     * {@link ConcurrentHashMap#putVal}
+     * возвращает в конце null.
+     *
      * @param account лицевой счет пользователя.
      * @return true, если лиц счет был добавлен.
      */
     public synchronized boolean add(Account account) {
-        return accounts.putIfAbsent(account.id(), account) != null;
+        return accounts.putIfAbsent(account.id(), account) == null;
     }
 
     public synchronized boolean update(Account account) {

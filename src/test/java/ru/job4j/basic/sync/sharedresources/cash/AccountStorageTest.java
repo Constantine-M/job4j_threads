@@ -16,6 +16,13 @@ public class AccountStorageTest {
     }
 
     @Test
+    public void whenNotAdd() {
+        var storage = new AccountStorage();
+        storage.add(new Account(1, 100));
+        assertThat(storage.add(new Account(1, 200))).isFalse();
+    }
+
+    @Test
     public void whenUpdate() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
