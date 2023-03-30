@@ -57,15 +57,13 @@ public class SingleLockList<T> implements Iterable<T> {
      * Данный метод копирует изначальный список.
      *
      * <p>Я нашел 2 варианта исполнения -
-     * короткий и более подробный. Короткий
-     * вариант нагляднее показывает работу
-     * шаблона "Декоратор" - метод
-     * {@link Collections#synchronizedList}
+     * короткий и более подробный. Оба
+     * варианта - это аналоги метода
+     * {@link Collections#synchronizedList}.
+     * Метод нагляднее показывает работу
+     * шаблона "Декоратор" -
      * оборачивает наш список и возвращает
-     * его синхронизированный вид. А потом
-     * мы этот список используем в качестве
-     * копируемого списка, когда создаем новый
-     * (...new ArrayList()).
+     * его синхронизированный вид.
      *
      * <p>Во втором способе я использовал
      * коллектор и его метод
@@ -80,9 +78,8 @@ public class SingleLockList<T> implements Iterable<T> {
      * @return thread-safe копия исходного списка.
      */
     private synchronized List<T> copy(List<T> origin) {
-        /*return new ArrayList<>(Collections.synchronizedList(origin));*/
-        return Collections.synchronizedList(origin)
-                .stream()
-                .collect(Collectors.collectingAndThen(Collectors.toList(), ArrayList::new));
+        /*return new ArrayList<>(origin);*/
+        return origin.stream()
+                    .collect(Collectors.collectingAndThen(Collectors.toList(), ArrayList::new));
     }
 }
