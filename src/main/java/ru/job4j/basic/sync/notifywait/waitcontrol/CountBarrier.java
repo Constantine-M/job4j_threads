@@ -47,7 +47,7 @@ public class CountBarrier {
      */
     private final int total;
 
-    private volatile int count = 0;
+    private int count = 0;
 
     public CountBarrier(final int total) {
         this.total = total;
