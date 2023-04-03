@@ -43,38 +43,42 @@ public class SimpleBlockingQueue<T> {
     /**
      * Данный метод добавляет объект
      * в очередь.
+     *
+     * <p>Так как мы пометили весь метод
+     * ключевым словом synchronized, то
+     * внутри метода не было необходимости
+     * вызывать {@link Object#wait()} и
+     * {@link Object#notify()} с помощью
+     * объекта queue. Из-за
+     * этого программа делала только
+     * 1 итерацию и падала с исключением.
+     *
      * @param value добавляемый объект.
      */
-    public synchronized void offer(T value) {
-        while (queue.size() != 0) {
-            try {
-                queue.wait();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+    public synchronized void offer(T value) throws InterruptedException {
+        while (queue.size() == queueMaxSize) {
+            wait();
         }
         queue.add(value);
-        queue.notify();
+        notify();
     }
 
     /**
      * Данный метод возвращает объект
      * из внутренней очереди.
+     *
      * @return the head of this queue.
      */
-    public synchronized T poll() {
+    public synchronized T poll() throws InterruptedException {
         while (queue.isEmpty()) {
-            try {
-                queue.wait();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+            wait();
         }
-        queue.notify();
-        return queue.remove();
+        T result = queue.poll();
+        notify();
+        return result;
     }
 
-    public int size() {
+    public synchronized int size() {
         return queue.size();
     }
 }
