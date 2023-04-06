@@ -1,6 +1,7 @@
 package ru.job4j.basic.sync.notifywait.blockingqueue;
 
 import org.junit.Test;
+import ru.job4j.multithreading.threadsync.notifywait.blockingqueue.SimpleBlockingQueue;
 
 import java.util.Arrays;
 import java.util.concurrent.CopyOnWriteArrayList;

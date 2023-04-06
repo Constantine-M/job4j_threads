@@ -1,6 +1,7 @@
 package ru.job4j.basic.sync.sharedresources.jcip;
 
 import org.junit.Test;
+import ru.job4j.multithreading.threadsync.sharedresources.jcip.Count;
 
 import static org.assertj.core.api.Assertions.*;
 

@@ -1,6 +1,7 @@
 package ru.job4j.basic.sync.sharedresources.threadsafelist;
 
 import org.junit.jupiter.api.Test;
+import ru.job4j.multithreading.threadsync.sharedresources.threadsafelist.SingleLockList;
 
 import java.util.ArrayList;
 import java.util.Set;

@@ -1,6 +1,8 @@
 package ru.job4j.basic.sync.sharedresources.cash;
 
 import org.junit.Test;
+import ru.job4j.multithreading.threadsync.sharedresources.cash.Account;
+import ru.job4j.multithreading.threadsync.sharedresources.cash.AccountStorage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
