@@ -8,8 +8,10 @@ public class CASCount {
 
     public void increment() {
         int current = get();
-        int next = current + 1;
-        count.compareAndSet(current, next);
+        int next;
+        do {
+            next = current + 1;
+        } while (count.compareAndSet(current, next));
     }
 
     public int get() {
