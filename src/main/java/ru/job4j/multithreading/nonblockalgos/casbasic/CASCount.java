@@ -25,6 +25,17 @@ public class CASCount {
      * счетчика count (который в памяти),
      * мы можем увеличивать значение
      * count на 1.
+     *
+     * <p>Имеется еще такой вариант объяснения:
+     * Consider the following scenario:
+     * 1.Thread 1 calls get and gets the value 1.
+     * 2.Thread 1 calculates next to be 2.
+     * 3.Thread 2 calls get and gets the value 1.
+     * 4.Thread 2 calculates next to be 2.
+     * 5.Both threads try to write the value.
+     * Now because of atomics - only one thread
+     * will succeed, the other will recieve false
+     * from the compareAndSet and go around again.
      */
     public void increment() {
         int current;
