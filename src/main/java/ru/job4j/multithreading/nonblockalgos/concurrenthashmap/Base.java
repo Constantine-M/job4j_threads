@@ -26,6 +26,12 @@ public class Base {
         this.version = version;
     }
 
+    public Base(int id, String name, int version) {
+        this.id = id;
+        this.name = name;
+        this.version = version;
+    }
+
     public int getId() {
         return id;
     }
