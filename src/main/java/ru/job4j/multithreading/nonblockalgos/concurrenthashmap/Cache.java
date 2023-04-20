@@ -43,7 +43,8 @@ public class Cache {
      * Если версии одинаковые, то обновляем
      * модель - перезаписываем модель
      * со старыми данными, но увеличенным
-     * счетчиком.
+     * счетчиком и возвращаем этот
+     * обновленный объект.
      *
      * @param model обновляемая модель {@link Base}.
      * @return true если элемент обновился.
@@ -54,11 +55,11 @@ public class Cache {
                     if (value.getVersion() != model.getVersion()) {
                         throw new OptimisticException("Versions are not equal");
                     }
-                    Base stored = memory.get(key);
-                    Base updatedBase = memory.put(stored.getId(), new Base(stored.getId(), stored.getName(), value.getVersion() + 1));
-                    return updatedBase;
+                    Base updateBase = new Base(value.getId(), value.getVersion() + 1);
+                    updateBase.setName(value.getName());
+                    return updateBase;
                 }
-        ) == null;
+        ) != null;
     }
 
     /**
@@ -77,20 +78,6 @@ public class Cache {
     }
 
     public Base get(int baseId) {
-        Base result = memory.get(baseId);
-        return result;
-    }
-
-    public static void main(String[] args) {
-        Cache cache = new Cache();
-        Base base = new Base(1, 0);
-        cache.add(base);
-        Base first = cache.get(1);
-        System.out.println("First base: " + first.toString());
-        first.setName("Foo");
-        cache.update(first);
-        System.out.println("After rename and update: " + first.toString());
-        Base second = cache.get(1);
-        System.out.println("Second base: " + second.toString());
+        return memory.get(baseId);
     }
 }

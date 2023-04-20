@@ -1,12 +1,9 @@
 package ru.job4j.multithreading.nonblockalgos.concurrenthashmap;
 
-import org.junit.Ignore;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Disabled
 class CacheTest {
 
     /**
@@ -27,16 +24,14 @@ class CacheTest {
         assertThat(cache.get(1).getName()).isEqualTo("Last");
     }
 
-    @Ignore
     @Test
-    void whenVersionUpdate() {
-        Base startBase = new Base(1, 0);
+    void whenChangeNameThenIncrementVersion() {
         Cache cache = new Cache();
-        cache.add(startBase);
-        Base first = cache.get(1);
-        first.setName("First");
-        cache.update(first);
-        Base second = cache.get(1);
-        assertThat(first.getVersion()).isEqualTo(1);
+        cache.add(new Base(1, 0));
+        Base base = cache.get(1);
+        base.setName("First");
+        cache.update(base);
+        Base updatedBase = cache.get(1);
+        assertThat(updatedBase.getVersion()).isEqualTo(1);
     }
 }
