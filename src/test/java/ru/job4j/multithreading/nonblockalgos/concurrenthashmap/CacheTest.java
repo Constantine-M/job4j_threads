@@ -34,4 +34,16 @@ class CacheTest {
         Base updatedBase = cache.get(1);
         assertThat(updatedBase.getVersion()).isEqualTo(1);
     }
+
+    @Test
+    void whenDeleteBaseWithId1ThenCacheNull() {
+        Cache cache = new Cache();
+        cache.add(new Base(1, 0));
+        Base base = cache.get(1);
+        base.setName("First");
+        cache.update(base);
+        Base updatedBase = cache.get(1);
+        cache.delete(updatedBase);
+        assertThat(cache.get(1)).isNull();
+    }
 }
