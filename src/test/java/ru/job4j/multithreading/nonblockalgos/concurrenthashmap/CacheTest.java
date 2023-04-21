@@ -3,6 +3,7 @@ package ru.job4j.multithreading.nonblockalgos.concurrenthashmap;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CacheTest {
 
@@ -45,5 +46,15 @@ class CacheTest {
         Base updatedBase = cache.get(1);
         cache.delete(updatedBase);
         assertThat(cache.get(1)).isNull();
+    }
+
+    @Test
+    void whenDifferentVersionThenThrowsAnException() {
+        Cache cache = new Cache();
+        cache.add(new Base(1, 0));
+        Base nonCached = new Base(1, 1);
+        assertThatThrownBy(() -> cache.update(nonCached))
+                .isInstanceOf(OptimisticException.class)
+                .hasMessageContaining("Versions are not equal");
     }
 }
