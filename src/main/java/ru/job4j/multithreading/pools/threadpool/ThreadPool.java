@@ -14,19 +14,40 @@ public class ThreadPool {
 
     private final static Logger LOG = LoggerFactory.getLogger(ThreadPool.class.getName());
 
+    private final static int THREAD_POOL_SIZE = Runtime.getRuntime().availableProcessors();
+
     private final List<Thread> threads = new LinkedList<>();
 
-    private final SimpleBlockingQueue<Runnable> tasks = new SimpleBlockingQueue<>(5);
+    private final SimpleBlockingQueue<Runnable> tasks = new SimpleBlockingQueue<>(THREAD_POOL_SIZE);
 
+    /**
+     * В данном конструкторе фактически
+     * настроен весь конвейер.
+     *
+     * <p>1.Создается кол-во потоков =
+     * кол-ву ядер процессора.
+     * 2.Каждая нить возвращает объект
+     * из внутренней очереди (по сути
+     * выполняет задачу).
+     *
+     * <p>Конвейер будет работать
+     * до тех пор, пока не вызовут
+     * метод {@link Thread#interrupt()}.
+     * Я добавил логгер для личного удобства,
+     * чтобы было видно, что в этот
+     * момент произойдет (остановка ThreadPool).
+     */
     public ThreadPool() {
-        int size = Runtime.getRuntime().availableProcessors();
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < THREAD_POOL_SIZE; i++) {
             threads.add(new Thread(
                     () -> {
-                        try {
-                            tasks.poll();
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
+                        while (!Thread.currentThread().isInterrupted()) {
+                            try {
+                                tasks.poll();
+                            } catch (InterruptedException e) {
+                                LOG.error("Threadpool is stopped. " + e);
+                                Thread.currentThread().interrupt();
+                            }
                         }
                     }
             ));
@@ -37,28 +58,10 @@ public class ThreadPool {
      * Данный метод добавляет задачи
      * в блокирующую очередь.
      *
-     * <p>Чтобы он не добавлял их постоянно,
-     * нужно сделать проверку на то, что
-     * работа всех потоков не остановлена.
-     *
-     * <p>Если работа всех потоков была
-     * остановлена, то метод должен выбросить
-     * исключение. Я добавил логгер
-     * для личного удобства, чтобы было
-     * видно, что в этот момент произойдет
-     * (остановка ThreadPool).
-     *
      * @param job добавляемая задача.
      */
-    public void work(Runnable job) {
-        while (!Thread.currentThread().isInterrupted()) {
-            try {
-                tasks.offer(job);
-            } catch (InterruptedException e) {
-                LOG.error("Threadpool is stopped.");
-                throw new RuntimeException(e);
-            }
-        }
+    public void work(Runnable job) throws InterruptedException {
+        tasks.offer(job);
     }
 
     /**
