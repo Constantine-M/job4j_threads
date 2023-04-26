@@ -14,21 +14,23 @@ public class EmailNotification {
     /**
      * Данный метод берет данные
      * пользователя и подставляет
-     * в шаблон.
+     * в шаблон, а затем формирует
+     * задачу, которая будет создавать
+     * данные для пользователя
+     * и передавать их в метод
+     * {@link EmailNotification#send}.
      *
      * @param user пользователь.
      */
-    public String emailTo(User user) {
-        return String.format("Notification %s to email %s", user.name(), user.email());
-    }
-
-    /*public void work() {
+    public void emailTo(User user) {
+        var subject = String.format("Notification %s to email %s", user.name(), user.email());
+        var body = String.format("Add a new event to %s", user.name());
         pool.submit(new Thread(
                 () -> {
-                    send(emailTo());
+                    send(subject, body, user.email());
                 }
         ));
-    }*/
+    }
 
     public void send(String subject, String body, String email) {
 
@@ -39,5 +41,12 @@ public class EmailNotification {
      */
     public void close() {
         pool.shutdown();
+        while (!pool.isTerminated()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
