@@ -26,13 +26,11 @@ public class EmailNotification {
         var subject = String.format("Notification %s to email %s", user.name(), user.email());
         var body = String.format("Add a new event to %s", user.name());
         pool.submit(new Thread(
-                () -> {
-                    send(subject, body, user.email());
-                }
+                () -> send(subject, body, user.email())
         ));
     }
 
-    public void send(String subject, String body, String email) {
+    private void send(String subject, String body, String email) {
 
     }
 
