@@ -74,10 +74,10 @@ public class ParallelSearchIndex<T> extends RecursiveTask<Integer> {
      */
     @Override
     protected Integer compute() {
-        if ((from - to) <= 10) {
+        if ((to - from) <= 10) {
             return linearSearch(array, element);
         }
-        int mid = ((from - to)) / 2;
+        int mid = ((to - from)) / 2;
         ParallelSearchIndex<T> ps1 = new ParallelSearchIndex<>(array, element, from, mid);
         ParallelSearchIndex<T> ps2 = new ParallelSearchIndex<>(array, element, mid + 1, to);
         ForkJoinTask.invokeAll(ps1, ps2);
