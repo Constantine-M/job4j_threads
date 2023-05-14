@@ -1,6 +1,5 @@
 package ru.job4j.multithreading.pools.completablefuture;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,7 +22,6 @@ class RolColSumTest {
         assertThat(result).isEqualTo(expected);
     }
 
-    @Disabled
     @Test
     void asyncSum() {
         int[][] matrix = new int[][] {

@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Данный класс описывает решение
@@ -87,40 +88,30 @@ public class RolColSum {
      * переменную для временного хранения
      * суммы (либо значений строки, либо
      * значений столбца).
-     * 2.Проходим сначала по строкам и
+     * 2.Проходим по матрице и
      * записываем во временное хранилище
-     * значение суммы значений строки.
+     * значение суммы значений строки и столбца.
      * 3.Начинаем заполнять результирующий
      * массив. Создаем объект {@link Sums}
-     * и заполняем поле суммы по строке.
-     * Второе поле оставляем нулевым.
-     * 4.Обнуляем временную переменную.
-     * 5.Далее точно так же проходим
-     * по столбцам. Перед проходом обнуляем
-     * переменную, отвечающую за индекс
-     * результирующего массива, т.к.
-     * мы будем заново проходить по
-     * результирующему массиву и заполнять
-     * у объектов {@link Sums} второе поле,
-     * которое описывает сумму по столбцам.
+     * и заполняем поле суммы по строке и
+     * поле суммы по столбцу.
+     * 4.Обнуляем временные переменные.
+     * 5.Повторяем пп.2, 3, 4 пока не
+     * закончится матрица.
      */
     public static Sums[] sum(int[][] matrix) {
         int n = matrix.length;
-        int temp = 0;
+        int tempRowSum = 0;
+        int tempColSum = 0;
         Sums[] result = new Sums[n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                temp += matrix[i][j];
+                tempRowSum += matrix[i][j];
+                tempColSum += matrix[j][i];
             }
-            result[i] = new Sums(temp, 0);
-            temp = 0;
-        }
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                temp += matrix[j][i];
-            }
-            result[i].setColSum(temp);
-            temp = 0;
+            result[i] = new Sums(tempRowSum, tempColSum);
+            tempRowSum = 0;
+            tempColSum = 0;
         }
         return result;
     }
@@ -128,18 +119,20 @@ public class RolColSum {
     public static Sums[] asyncSum(int[][] matrix) {
         int n = matrix.length;
         Sums[] result = new Sums[n];
-        for (int i = 0; i < n; i++) {
-            result[i] = new Sums(0, 0);
-        }
-        CompletableFuture.allOf(RolColSum.asyncRowSum(result, matrix),
-                                RolColSum.asyncColSum(result, matrix));
+        LOG.info("Processing in thread before async method: {}", Thread.currentThread().getName());
+        RolColSum.asyncRowAndColSum(result, matrix);
+        LOG.info("Processing in thread after async method: {}", Thread.currentThread().getName());
         return result;
     }
 
     /**
      * Данный метод в отдельном потоке
      * подсчитывает суммы значений по
-     * строкам квадратной матрицы.
+     * строкам и столбцам квадратной матрицы.
+     *
+     * Данный метод намеренно вынес отдельно,
+     * чтобы акцентировать внимание на
+     * отладке.
      *
      * <p>Чтобы корректно произвести debug
      * данного метода, следует (из личной
@@ -152,49 +145,64 @@ public class RolColSum {
      * чтобы IDEA предложила тебе переключиться
      * на другую нить.
      *
+     * <p>Если у вас только один worker, то
+     * IDEA не предлагает переключиться на него.
+     * Она сделает это автоматически в свое время,
+     * но только при условии, если ты правильно
+     * расставишь breakpoint-ы. Так вот, в данном
+     * случае я еще добавил breakpoint в методе
+     * asyncSum() на строке, где мы вызываем
+     * ассинхронный метод (asyncRowAndColSum()).
+     *
      * @param result результирующий массив.
      * @param matrix матрица, у которой собсно
      *               и нужно подсчитать всё.
      */
-    private static CompletableFuture<Void> asyncRowSum(Sums[] result, int[][] matrix) {
-        return CompletableFuture.runAsync(
+    private static void asyncRowAndColSum(Sums[] result, int[][] matrix) {
+        CompletableFuture.runAsync(
                 () -> {
-                    LOG.info("Sum of each row in thread: {}", Thread.currentThread().getName());
-                    int temp = 0;
+                    LOG.info("Processing in thread: {}", Thread.currentThread().getName());
+                    int tempRowSum = 0;
+                    int tempColSum = 0;
                     for (int i = 0; i < matrix.length; i++) {
                         for (int j = 0; j < matrix.length; j++) {
-                            temp += matrix[i][j];
+                            tempRowSum += matrix[i][j];
+                            tempColSum += matrix[j][i];
                         }
-                        result[i].setRowSum(temp);
-                        temp = 0;
+                        result[i] = new Sums(tempRowSum, tempColSum);
+                        LOG.info("Intermediate result: {}", Arrays.toString(result));
+                        tempRowSum = 0;
+                        tempColSum = 0;
                     }
                 }
         );
     }
 
-    private static CompletableFuture<Void> asyncColSum(Sums[] result, int[][] matrix) {
-        return CompletableFuture.runAsync(
-                () -> {
-                    LOG.info("Sum of each column in thread: {}", Thread.currentThread().getName());
-                    int temp = 0;
-                    for (int i = 0; i < matrix.length; i++) {
-                        for (int j = 0; j < matrix.length; j++) {
-                            temp += matrix[j][i];
-                        }
-                        result[i].setColSum(temp);
-                        temp = 0;
-                    }
-                }
-        );
-    }
-
-    public static void main(String[] args) {
-        int[][] matrix = new int[][] {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        int[][] matrix = new int[][]{
                 {5, 7, 2},
                 {6, 0, 3},
                 {2, 5, 4}
         };
-        RolColSum.Sums[] result = asyncSum(matrix);
-        System.out.println(Arrays.toString(result));
+        RolColSum.Sums[] result = new Sums[matrix.length];
+        CompletableFuture<Sums[]> sums = CompletableFuture.supplyAsync(
+                () -> {
+                    LOG.info("Processing in thread: {}", Thread.currentThread().getName());
+                    int tempRowSum = 0;
+                    int tempColSum = 0;
+                    for (int i = 0; i < matrix.length; i++) {
+                        for (int j = 0; j < matrix.length; j++) {
+                            tempRowSum += matrix[i][j];
+                            tempColSum += matrix[j][i];
+                        }
+                        result[i] = new Sums(tempRowSum, tempColSum);
+                        LOG.info("Intermediate result: {}", Arrays.toString(result));
+                        tempRowSum = 0;
+                        tempColSum = 0;
+                    }
+                    return result;
+                }
+        );
+        System.out.println(Arrays.toString(sums.get()));
     }
 }
