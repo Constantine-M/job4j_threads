@@ -16,8 +16,10 @@ About project.
 - Future. CompletableFuture.
 - Producer-Consumer pattern.
 - Java NIO.
-
-Manage Git branches in course.
+----------
+- Manage Git branches in course.
+- Creating branch from IDEA.
+- Git commit --amend.
 ----------
 Contacts.
 ----------
