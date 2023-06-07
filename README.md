@@ -20,6 +20,7 @@ About project.
 - Manage Git branches in course.
 - Creating branch from IDEA.
 - Git commit --amend.
+- Git reset --soft.
 ----------
 Contacts.
 ----------
