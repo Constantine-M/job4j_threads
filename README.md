@@ -8,6 +8,8 @@ About project.
     - start / interrupt;
     - synchronized;
     - wait / notify / notifyAll;
+
+Merge fixed changes.
 ----------
 Contacts.
 ----------
