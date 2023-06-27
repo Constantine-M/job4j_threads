@@ -8,8 +8,20 @@ About project.
     - start / interrupt;
     - synchronized;
     - wait / notify / notifyAll;
-
-Merge fixed changes.
+- Deadlock.
+- Lock. ReentrantLock vs synchronized {}.
+- Mutex, monitor, critical section.
+- Daemon Threads.
+- ThreadLocal.
+- Future. CompletableFuture.
+- Producer-Consumer pattern.
+- Java NIO.
+----------
+- Manage Git branches in course.
+- Creating branch from IDEA.
+- Git commit --amend.
+- Git reset --soft.
+- Git stash.
 ----------
 Contacts.
 ----------
