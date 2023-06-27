@@ -21,6 +21,7 @@ About project.
 - Creating branch from IDEA.
 - Git commit --amend.
 - Git reset --soft.
+- Git stash from IDEA.
 ----------
 Contacts.
 ----------
